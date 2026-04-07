@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}History{% endblock %}
+
+{% block content %}
+<div class="glass-card result-dashboard screenshot-area" style="max-width: 900px;">
+    <h2><i class="fa-solid fa-clock-rotate-left"></i> Prediction History</h2>
+    <p>View your recently generated flight delay predictions.</p>
+
+    {% if history %}
+    <div style="overflow-x: auto; margin-top: 1.5rem;">
+        <table class="summary-table" style="margin-top: 0; font-size: 1rem;">
+            <tr style="border-bottom: 2px solid var(--glass-border);">
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Airline</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Route</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Weather</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Delay Probability</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Status</th>
+            </tr>
+            {% for h in history %}
+            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                <td style="padding: 1rem; text-align: left;">{{ h.airline }}</td>
+                <td style="padding: 1rem; text-align: left;">{{ h.origin }} to {{ h.destination }}</td>
+                <td style="padding: 1rem; text-align: left;">{{ h.weather }}</td>
+                <td style="padding: 1rem; text-align: left; font-weight: bold; color: {% if h.predicted_label == 1 %}var(--danger){% else %}var(--success){% endif %};">
+                    {{ h.delay_probability }}%
+                </td>
+                <td style="padding: 1rem; text-align: left;">
+                    {% if h.predicted_label == 1 %}
+                        <span style="background: rgba(239, 68, 68, 0.2); color: var(--danger); padding: 5px 12px; border-radius: 12px; font-weight: bold;">Delayed</span>
+                    {% else %}
+                        <span style="background: rgba(16, 185, 129, 0.2); color: var(--success); padding: 5px 12px; border-radius: 12px; font-weight: bold;">On-Time</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+    <div style="background: rgba(255, 255, 255, 0.05); padding: 2.5rem; border-radius: 10px; margin: 2rem 0; text-align: center; border: 1px dashed var(--glass-border);">
+        <i class="fa-solid fa-box-open" style="font-size: 3rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+        <h3 style="color: var(--text-main);">No History Found</h3>
+        <p style="color: var(--text-muted); margin-bottom: 0;">You haven't made any predictions yet. Head over to the predict page to get started!</p>
+    </div>
+    {% endif %}
+
+    <div class="actions-row" style="margin-top: 2rem;">
+        <button onclick="takeScreenshot()" class="btn-secondary">
+            <i class="fa-solid fa-camera"></i> Save PDF / Image
+        </button>
+        <a href="/predict_form" class="btn-primary" style="margin-top: 0;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Make a Prediction
+        </a>
+    </div>
+</div>
+{% endblock %}

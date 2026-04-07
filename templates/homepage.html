@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body_class %}homepage-bg{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="text-align: center;">
+    <h1>AeroPredict</h1>
+    <p>Predict flight delays with high accuracy using our state-of-the-art AI model. Make your travel plans smarter and more reliable.</p>
+    
+    <div class="actions-row">
+        <a href="/predict_form" class="btn-primary">
+            <i class="fa-solid fa-plane-up"></i> Start Prediction
+        </a>
+        <a href="/about" class="btn-secondary">
+            Learn More
+        </a>
+    </div>
+</div>
+{% endblock %}

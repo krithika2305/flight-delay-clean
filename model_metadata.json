@@ -1,0 +1,8 @@
+{
+    "top_k_maps": {
+        "Reporting_Airline": ["DL", "OO", "UA", "WN"],
+        "Origin": ["CLT", "DEN", "DFW", "IAH", "LAX", "ORD", "PHX", "SFO"],
+        "Dest": ["CLT", "DEN", "DFW", "IAH", "LAX", "ORD", "PHX", "SFO"]
+    },
+    "num_features": ["Month", "DayOfWeek", "Distance", "CRSDep_MIN"]
+}

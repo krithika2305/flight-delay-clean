@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Messages{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 1000px; width: 100%;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 style="margin: 0;"><i class="fa-solid fa-envelope-open-text"></i> System Messages</h2>
+        <a href="/admin/dashboard" class="btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
+
+    {% if messages %}
+    <div style="overflow-x: auto;">
+        <table class="summary-table" style="margin-top: 0; font-size: 0.95rem;">
+            <tr style="border-bottom: 2px solid var(--glass-border);">
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">ID</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Name</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Email</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Message (Time)</th>
+                <th style="padding: 1rem; text-align: center; color: var(--accent-color);">Action</th>
+            </tr>
+            {% for msg in messages %}
+            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                <td style="padding: 1rem;">{{ msg.id }}</td>
+                <td style="padding: 1rem;">{{ msg.name }}</td>
+                <td style="padding: 1rem;">{{ msg.email }}</td>
+                <td style="padding: 1rem;">
+                    <strong>{{ msg.timestamp }}</strong><br>
+                    {{ msg.message }}
+                </td>
+                <td style="padding: 1rem; text-align: center;">
+                    <a href="/admin/messages/delete/{{ msg.id }}" style="color: var(--danger); text-decoration: none;" onclick="return confirm('Delete message?');"><i class="fa-solid fa-trash"></i> Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+    <p style="text-align: center; color: var(--text-muted); margin-top: 2rem;">No messages recorded.</p>
+    {% endif %}
+</div>
+{% endblock %}

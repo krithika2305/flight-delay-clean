@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 500px;">
+    <h2><i class="fa-solid fa-user-plus"></i> Create Account</h2>
+    <p>Sign up to access advanced flight delay predictions.</p>
+    
+    <form action="/register" method="POST">
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Full Name</label>
+            <input type="text" name="name" required placeholder="John Doe">
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1rem;">
+            <label>Email Address</label>
+            <input type="email" name="email" required placeholder="name@example.com">
+        </div>
+        
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+            <label>Password</label>
+            <input type="password" name="password" required placeholder="••••••••">
+        </div>
+        
+        <button type="submit" class="btn-primary" style="margin-top: 0;">
+            Register Account
+        </button>
+        <p style="margin-top: 1rem; color: var(--text-muted);">Already have an account? <a href="/login" style="color: var(--accent-hover);">Login here</a></p>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight Delay Prediction | {% block title %}{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <div class="background-animation">
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+        <div class="bubble"></div>
+    </div>
+
+    <nav class="navbar glassmorphism">
+        <div class="nav-brand">
+            <i class="fa-solid fa-plane-departure"></i>
+            <span>AeroPredict</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/" class="nav-item"><i class="fa-solid fa-house"></i> Home</a></li>
+            <li><a href="/about" class="nav-item"><i class="fa-solid fa-circle-info"></i> About</a></li>
+            {% if session.user_id %}
+            <li><a href="/predict_form" class="nav-item"><i class="fa-solid fa-chart-line"></i> Predict</a></li>
+            <li><a href="/history" class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i> History</a></li>
+            {% endif %}
+            <li><a href="/contact" class="nav-item"><i class="fa-solid fa-envelope"></i> Contact</a></li>
+            {% if session.user_id or session.is_admin %}
+            <li><a href="/logout" class="nav-item"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+            {% else %}
+            <li><a href="/login" class="nav-item"><i class="fa-solid fa-right-to-bracket"></i> Login</a></li>
+            {% endif %}
+            {% if session.is_admin %}
+            <li><a href="/admin/dashboard" class="nav-item" style="color: #fbbf24;"><i class="fa-solid fa-user-shield"></i> Admin</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="main-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div style="text-align:center; padding:1rem; margin-bottom:1.5rem; border-radius:10px; width: 100%; max-width: 800px; 
+                  {% if category == 'success' %}background: rgba(16, 185, 129, 0.2); border: 1px solid rgba(16, 185, 129, 0.5); color: #10b981;
+                  {% else %}background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.5); color: #ef4444;{% endif %}">
+                <i class="fa-solid fa-bell"></i> {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+        function takeScreenshot() {
+            const captureArea = document.querySelector('.screenshot-area') || document.body;
+            html2canvas(captureArea, {
+                backgroundColor: null,
+                scale: 2,
+                logging: false,
+                useCORS: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'flight_prediction_result.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>

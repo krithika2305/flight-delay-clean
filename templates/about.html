@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <h2><i class="fa-solid fa-circle-info"></i> About AeroPredict</h2>
+    <p>AeroPredict is a modern, AI-powered system designed to predict flight delays based on historical flight data.</p>
+    
+    <div style="text-align: left; margin-top: 2rem;">
+        <h3 style="text-align: left;">How it works</h3>
+        <p style="text-align: left; color: var(--text-main);">
+            Our machine learning model analyzes key factors like the scheduled departure time, the airline, the origin, and the destination to estimate the probability of a delay. By utilizing historical flight performance, we can help travelers plan their itineraries safely and effectively.
+        </p>
+
+        <h3 style="text-align: left; margin-top: 1.5rem;">The Dataset</h3>
+        <p style="text-align: left; color: var(--text-main);">
+            The model was trained on millions of flight records. All the required preprocessing, one-hot encoding, and hyperparameter tuning were carefully applied using Scikit-Learn to ensure highest possible accuracy.
+        </p>
+    </div>
+</div>
+{% endblock %}

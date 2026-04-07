@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Predict Delay{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <h2><i class="fa-solid fa-plane-up"></i> Predict Flight Delay</h2>
+    <p>Enter the flight details below to get the delay probability.</p>
+    
+    {% if error %}
+    <div class="error-msg" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; padding: 1rem; border-radius: 10px; margin-bottom: 1.5rem; text-align: center; border: 1px solid rgba(239, 68, 68, 0.3);">
+        <i class="fa-solid fa-circle-exclamation"></i> {{ error }}
+    </div>
+    {% endif %}
+    
+    <form action="/predict" method="POST">
+        <div class="form-grid">
+            <div class="form-group">
+                <label>Month (1-12)</label>
+                <input type="number" name="Month" min="1" max="12" required placeholder="e.g., 5">
+            </div>
+            
+            <div class="form-group">
+                <label>Day Of Week (1-7, 1=Mon)</label>
+                <input type="number" name="DayOfWeek" min="1" max="7" required placeholder="e.g., 3">
+            </div>
+            
+            <div class="form-group">
+                <label>Scheduled Departure (HHMM)</label>
+                <input type="number" name="CRSDepTime" required placeholder="e.g., 1430">
+            </div>
+            
+            <div class="form-group">
+                <label>Distance (Miles)</label>
+                <input type="number" name="Distance" required placeholder="e.g., 500">
+            </div>
+            
+            <div class="form-group">
+                <label>Reporting Airline Code</label>
+                <select name="Reporting_Airline" required>
+                    <option value="" disabled selected>Select Airline</option>
+                    <option value="DL">Delta Air Lines (DL)</option>
+                    <option value="OO">SkyWest Airlines (OO)</option>
+                    <option value="UA">United Airlines (UA)</option>
+                    <option value="WN">Southwest Airlines (WN)</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Origin Airport</label>
+                <select name="Origin" required>
+                    <option value="" disabled selected>Select Origin</option>
+                    <option value="CLT">Charlotte (CLT)</option>
+                    <option value="DEN">Denver (DEN)</option>
+                    <option value="DFW">Dallas/Fort Worth (DFW)</option>
+                    <option value="IAH">Houston (IAH)</option>
+                    <option value="LAX">Los Angeles (LAX)</option>
+                    <option value="ORD">Chicago (ORD)</option>
+                    <option value="PHX">Phoenix (PHX)</option>
+                    <option value="SFO">San Francisco (SFO)</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Destination Airport</label>
+                <select name="Dest" required>
+                    <option value="" disabled selected>Select Target</option>
+                    <option value="CLT">Charlotte (CLT)</option>
+                    <option value="DEN">Denver (DEN)</option>
+                    <option value="DFW">Dallas/Fort Worth (DFW)</option>
+                    <option value="IAH">Houston (IAH)</option>
+                    <option value="LAX">Los Angeles (LAX)</option>
+                    <option value="ORD">Chicago (ORD)</option>
+                    <option value="PHX">Phoenix (PHX)</option>
+                    <option value="SFO">San Francisco (SFO)</option>
+                    <option value="Other">Other</option>
+                </select>
+                </div>
+
+            <div class="form-group" style="grid-column: 1 / -1;">
+                <hr style="border: 0; border-top: 1px solid var(--glass-border); margin: 0.5rem 0 1rem 0;">
+                <h3 style="text-align: left; margin: 0; font-size: 1.1rem; color: var(--accent-color);">Additional Context <i class="fa-solid fa-cloud-sun"></i></h3>
+            </div>
+
+            <div class="form-group">
+                <label>Weather Condition 🌦️</label>
+                <select name="Weather" required>
+                    <option value="" disabled selected>Select Weather</option>
+                    <option value="Clear">Clear</option>
+                    <option value="Rain">Rain</option>
+                    <option value="Fog">Fog</option>
+                    <option value="Storm">Storm</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Previous Delay ⏳</label>
+                <input type="number" name="PreviousDelay" min="0" placeholder="Mins (e.g., 15) ">
+            </div>
+            
+            <div class="form-group">
+                <label>Airport Traffic Level 🛫</label>
+                <select name="TrafficLevel" required>
+                    <option value="" disabled selected>Select Traffic</option>
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+            </div>
+        </div>
+        </div>
+        
+        <button type="submit" class="btn-primary">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Predict Now
+        </button>
+    </form>
+</div>
+{% endblock %}

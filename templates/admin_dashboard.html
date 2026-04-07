@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 1000px; width: 100%;">
+    <h2><i class="fa-solid fa-server"></i> System Control Panel</h2>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+        
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 15px; padding: 2rem; text-align: center;">
+            <i class="fa-solid fa-users" style="font-size: 3rem; color: #10b981; margin-bottom: 1rem;"></i>
+            <h3 style="margin-bottom: 0.5rem; color: #10b981;">Total Users</h3>
+            <span style="font-size: 2.5rem; font-weight: bold;">{{ u_count }}</span>
+        </div>
+
+        <a href="/admin/messages" style="text-decoration: none;">
+            <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 15px; padding: 2rem; text-align: center; transition: all 0.3s; cursor: pointer;">
+                <i class="fa-solid fa-envelope-open-text" style="font-size: 3rem; color: #3b82f6; margin-bottom: 1rem;"></i>
+                <h3 style="margin-bottom: 0.5rem; color: #3b82f6;">Contact Messages</h3>
+                <span style="font-size: 2.5rem; font-weight: bold; color: #f8fafc;">{{ m_count }}</span>
+            </div>
+        </a>
+
+        <a href="/admin/predictions" style="text-decoration: none;">
+            <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 15px; padding: 2rem; text-align: center; transition: all 0.3s; cursor: pointer;">
+                <i class="fa-solid fa-chart-line" style="font-size: 3rem; color: #fbbf24; margin-bottom: 1rem;"></i>
+                <h3 style="margin-bottom: 0.5rem; color: #fbbf24;">Server Predictions</h3>
+                <span style="font-size: 2.5rem; font-weight: bold; color: #f8fafc;">{{ p_count }}</span>
+            </div>
+        </a>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Result{% endblock %}
+
+{% block extra_head %}
+<!-- Chart.js for Visual Data -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="glass-card result-dashboard screenshot-area" style="max-width: 900px;">
+    <h2><i class="fa-solid fa-square-poll-vertical"></i> Prediction Dashboard</h2>
+    
+    <div class="result-status {% if result.predicted_label == 1 %}status-delayed{% else %}status-ontime{% endif %}">
+        {% if result.predicted_label == 1 %}
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Likely Delayed</span>
+        {% else %}
+            <i class="fa-solid fa-circle-check"></i>
+            <span>Likely On-Time</span>
+        {% endif %}
+    </div>
+
+    <!-- Explanation Box 🧠 -->
+    <div style="background: rgba(255, 255, 255, 0.05); padding: 1.5rem; border-radius: 10px; margin: 1.5rem 0; text-align: left; border-left: 5px solid {% if result.predicted_label == 1 %}var(--danger){% else %}var(--success){% endif %};">
+        <h3 style="margin-bottom: 0.5rem; font-size: 1.2rem; text-align: left;"><i class="fa-solid fa-lightbulb" style="color: #fbbf24;"></i> Why this prediction?</h3>
+        <p style="text-align: left; margin: 0; color: var(--text-main);">👉 "{{ result.explanation }}"</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin: 2rem 0; align-items: center;">
+        
+        <!-- Bar Chart (Prediction) -->
+        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 15px;">
+            <h4 style="margin-bottom: 1rem; color: var(--text-muted); font-weight: 600;">Prediction Probability</h4>
+            <canvas id="predictionBarChart"></canvas>
+        </div>
+
+        <!-- Confidence Speedometer -->
+        <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 15px; position: relative;">
+            <h4 style="margin-bottom: 1rem; color: var(--text-muted); font-weight: 600;">Confidence Meter</h4>
+            <canvas id="confidenceMeter"></canvas>
+            <!-- Label center aligned under speedometer -->
+            <div style="position: absolute; bottom: 15%; width: 100%; text-align: center; left: 0;">
+                <span style="font-size: 1.5rem; font-weight: bold; color: {% if result.predicted_label == 1 %}var(--danger){% else %}var(--success){% endif %};">
+                    {% if result.predicted_label == 1 %}{{ result.prob_delayed }}%{% else %}{{ result.prob_on_time }}%{% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <table class="summary-table">
+        <tr>
+            <td>Airline</td>
+            <td>{{ input.Reporting_Airline }}</td>
+            <td>Weather</td>
+            <td>{{ input.Weather }}</td>
+        </tr>
+        <tr>
+            <td>Route</td>
+            <td>{{ input.Origin }} to {{ input.Dest }}</td>
+            <td>Traffic Level</td>
+            <td>{{ input.TrafficLevel }}</td>
+        </tr>
+        <tr>
+            <td>Dep Time</td>
+            <td>{{ input.CRSDepTime }}</td>
+            <td>Prev Delay</td>
+            <td>{{ input.PreviousDelay if input.PreviousDelay else '0' }} mins</td>
+        </tr>
+    </table>
+    
+
+
+</div>
+
+<div class="actions-row" style="margin-top: 1.5rem;">
+    <button onclick="takeScreenshot()" class="btn-secondary">
+        <i class="fa-solid fa-camera"></i> Save Screenshot
+    </button>
+    <a href="/predict_form" class="btn-primary" style="margin-top: 0;">
+        <i class="fa-solid fa-arrow-rotate-left"></i> Check Another
+    </a>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Bar Chart Script
+        var ctxBar = document.getElementById('predictionBarChart').getContext('2d');
+        new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['Delayed', 'On-Time'],
+                datasets: [{
+                    label: 'Probability (%)',
+                    data: [{{ result.prob_delayed }}, {{ result.prob_on_time }}],
+                    backgroundColor: ['rgba(239, 68, 68, 0.8)', 'rgba(16, 185, 129, 0.8)'],
+                    borderRadius: 5,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                aspectRatio: 1.5,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: { color: '#cbd5e1' },
+                        grid: { color: 'rgba(255,255,255,0.1)' }
+                    },
+                    x: {
+                        ticks: { color: '#cbd5e1', font: { family: "'Outfit', sans-serif" } },
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Speedometer Gauge Script (Half Doughnut)
+        var ctxGauge = document.getElementById('confidenceMeter').getContext('2d');
+        
+        let label1 = {% if result.predicted_label == 1 %}{{ result.prob_delayed }}{% else %}{{ result.prob_on_time }}{% endif %};
+        let labelColor = {% if result.predicted_label == 1 %}'#ef4444'{% else %}'#10b981'{% endif %};
+        
+        new Chart(ctxGauge, {
+            type: 'doughnut',
+            data: {
+                labels: ['Confidence', 'Remaining'],
+                datasets: [{
+                    data: [label1, 100 - label1],
+                    backgroundColor: [labelColor, 'rgba(255, 255, 255, 0.1)'],
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                aspectRatio: 1.5,
+                circumference: 180,
+                rotation: -90,
+                cutout: '80%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

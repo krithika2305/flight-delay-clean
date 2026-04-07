@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}System Predictions Logs{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 1200px; width: 100%;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <h2 style="margin: 0;"><i class="fa-solid fa-cloud-bolt"></i> Database Prediction Tracker</h2>
+        <a href="/admin/dashboard" class="btn-secondary"><i class="fa-solid fa-arrow-left"></i> Back</a>
+    </div>
+
+    {% if predictions %}
+    <div style="overflow-x: auto; max-height: 600px; overflow-y: auto;">
+        <table class="summary-table" style="margin-top: 0; font-size: 0.9rem;">
+            <tr style="border-bottom: 2px solid var(--glass-border); position: sticky; top: 0; background: var(--secondary-bg);">
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">ID</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">User Name</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Carrier</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Route (Dist)</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Condition</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Outcome</th>
+                <th style="padding: 1rem; text-align: left; color: var(--accent-color);">Timestamp</th>
+            </tr>
+            {% for p in predictions %}
+            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                <td style="padding: 1rem;">{{ p.id }}</td>
+                <td style="padding: 1rem;">{{ p.user_name }} (UID: {{ p.user_id }})</td>
+                <td style="padding: 1rem;">{{ p.airline }}</td>
+                <td style="padding: 1rem;">{{ p.origin }} -> {{ p.destination }}<br><small>{{ p.distance }} mi</small></td>
+                <td style="padding: 1rem;">{{ p.weather }}</td>
+                <td style="padding: 1rem;">
+                    {% if p.predicted_label == 1 %}
+                        <span style="color: var(--danger); font-weight: bold;">Delayed ({{ p.delay_probability }}%)</span>
+                    {% else %}
+                        <span style="color: var(--success); font-weight: bold;">On Time ({{ p.ontime_probability }}%)</span>
+                    {% endif %}
+                </td>
+                <td style="padding: 1rem;"><small>{{ p.timestamp }}</small></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+    <p style="text-align: center; color: var(--text-muted); margin-top: 2rem;">No system prediction logs currently exist.</p>
+    {% endif %}
+</div>
+{% endblock %}

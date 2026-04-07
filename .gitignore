@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pkl
+*.db
+*.xls
+merged_output.csv
+.idea/
