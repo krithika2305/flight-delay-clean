@@ -18,7 +18,7 @@ try:
     model = joblib.load(BASE / "FlightDelayPredictionModel.pkl")
 except:
     model = None
-feature_cols = pd.read_csv(BASE / "model_feature_columns.csv", header=None)[0].tolist()
+feature_cols = pd.read_csv(BASE / "model_feature_columns.xls", header=None)[0].tolist()
 feature_cols = [str(c) for c in feature_cols if str(c) != '0']
 
 with open(BASE / "model_metadata.json", "r") as f:
